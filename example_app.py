@@ -1,7 +1,7 @@
 """
 TornadoQL server as a simple example or skeleton
 """
-from tornadoql.tornadoql import TornadoQL
+from tornadoql import TornadoQL
 from example_schema import DEFAULT_SCHEMA
 from basescript import BaseScript
 
