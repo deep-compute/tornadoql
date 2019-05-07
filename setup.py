@@ -22,7 +22,7 @@ setup(
     install_requires=[
         'basescript==0.2.8',
         'graphene==2.1.3',
-        'tornado==6.0.2',
+        'tornado>=5.1.1',
         'deeputil==0.2.5',
         'Rx==1.6.1'
     ],
