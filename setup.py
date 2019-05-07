@@ -8,7 +8,7 @@ setup(
     packages=['tornadoql'],
     url='https://github.com/deep-compute/tornadoql',
     license='MIT',
-    keywords=['graphql'. 'graphene', 'python', 'tornado'],
+    keywords=['graphql', 'graphene', 'python', 'tornado'],
     author='deep-compute',
     author_email='support@deepcompute.com',
     description='GraphQL API for dev and hosting using Graphene and Tornado',
@@ -19,10 +19,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4'
     ],
-    install_requires=[i
+    install_requires=[
         'basescript==0.2.8',
         'graphene==2.1.3',
-        'tornado==6.0.2',
+        'tornado>=5.1.1',
         'deeputil==0.2.5',
         'Rx==1.6.1'
     ],
@@ -31,7 +31,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "tornadoql = gitkanban:main",
+            "tornadoql = tornadoql:main",
         ]
     }
 )

@@ -1,0 +1,44 @@
+language: python
+python:
+- '3.4'
+install:
+- pip install .
+- pip install unittest2
+script:
+- echo "No tests"
+before_deploy:
+- wget https://github.com/jgm/pandoc/releases/download/1.19.1/pandoc-1.19.1-1-amd64.deb
+  -O $TRAVIS_BUILD_DIR/pandoc.deb
+- sudo dpkg -i $TRAVIS_BUILD_DIR/pandoc.deb
+- rm $TRAVIS_BUILD_DIR/pandoc.deb
+- pandoc --from=markdown --to=rst --output=$TRAVIS_BUILD_DIR/README.rst README.md
+deploy:
+- provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: "GSWcDIWk8AqurJ/SNn8yCiFKq2TU79wsI7RXpp7lM0qyM8CBt3iza9KzeH4kDsa6DNqvIFZ+IvTsTwrVOCB0gGlFhffrbht+PeEeNVjU1r44YG873bZoWElVhTM5OnOpZPM7vD6TNLQ40xT27OdkPf4uoVjH+dx5M14Gvy1lm3BHkTJJNT2iDNEkgtSthVvDe1Eg6IjtHh8NFRB5juDRhbNavQKSUYOgxPH0k0LSQPvAmcOefIjcF0ZM1qIwm9sqpJHQIzVZuPGf05jIW2wmEPl1/NBSlRJsUivE2G5QHEbHd9Jbdu0/xmpCxMOt8Qo1hfwodieTQDXuRR1WwANHz86rsn00tONW1XtgG6Pg6W9bV5iVI9KHaim2S8sYa8oQzQEbT4hyTvGEWgsklH+id6Nfil8fanqTAf5mkh55qzUULfxbpaJa64TOHhOv6ic/FKPHyhcSPVJCPxs5DtmwJKgQaxLEQc0riIh4kQKo6bW36AVrJJS05KAhV6598EGaE0n1Hra4S5WhE7Odv/ty8WedTh/nHHwTVe6X/Gj6dWuD0kaORXkzNdZIfHu/0gzPRpLKQekKN5P/d+tqSsgSJB9IYCt93YUSa1w4Mz6aSr2G5ITWWB1MmqkVL8RgT4Kv1kDHpBJH0WqtrzGgjxFRPyprQr2KbhYXA8LY90QNozs="
+  name: tornadoql-0.1.5
+  tag_name: 0.1.5
+  on:
+    repo: deep-compute/tornadoql
+- provider: pypi
+  distributions: "sdist bdist_wheel"
+  server: https://testpypi.python.org/pypi
+  skip_cleanup: true
+  user: "deepcompute"
+  password:
+    secure: "D1n9Av8FR900P41FpogZY/36ibGT2VyITr/cCQn+akfOvwCjL1Z+8EzJgMmUspBPBwNzCZ5zd4n6dCP4C9t3n1Ke0uMdJmZyReEIrcpqxWPn5uH5nsDNUZu2ICCM1Lo2GmScTZP53B1KQGeqHckG8gYSWsMoszgOfsu8iLMKsVsAZdmiKrbuXoOO3mc3p26jV/23nZzV/i9cNZa8q5IgY64hxF8dZ8xMZnHYPUgC26RWlzBO4pVwF011enXPEwTAFPJ2CHzANyhvYJpSUYeOVCCJo2o/hzHAZgkHXgNO4J7ok57Cvmt0xWySNg0EX8wmweJE3XInszu9IiF289/myeq3/SKtXRsQSryYYJPxjwMzgTQEgaZpU4w+AEElLEBTb867RB++thVoLzhUlrLqZgU0Y9RiN9BxWjEiiuVUDckHHcTBNGZIWkrHHVUa59RZmySNiLqnsE+JThUKiQyoPDRM8e+Y81v5nZZbbgnI49MPjmd1qvDnPQyBSzTgdEdUGKcc1XdkBYuTJ8Lm2iJouVKF3RkvQjT6GB2YRgFq4FKZQS2T7nE3rJfPT7TAG328id4av3dZvhC1TPNWdf4MzKtiaAAVSlLn5z5fNct4869k9k0jxuE4BDtWi3t3yzg/b7t4nqI5f4fpZOFjG2vFJ9JxK/C8ot2rgvHUmw6nlvQ="
+  on:
+    branch: master
+    tags: false
+  # pypi
+- provider: pypi
+  distributions: "sdist bdist_wheel"
+  skip_cleanup: true
+  user: "deepcompute"
+  password: 
+    secure: "D1n9Av8FR900P41FpogZY/36ibGT2VyITr/cCQn+akfOvwCjL1Z+8EzJgMmUspBPBwNzCZ5zd4n6dCP4C9t3n1Ke0uMdJmZyReEIrcpqxWPn5uH5nsDNUZu2ICCM1Lo2GmScTZP53B1KQGeqHckG8gYSWsMoszgOfsu8iLMKsVsAZdmiKrbuXoOO3mc3p26jV/23nZzV/i9cNZa8q5IgY64hxF8dZ8xMZnHYPUgC26RWlzBO4pVwF011enXPEwTAFPJ2CHzANyhvYJpSUYeOVCCJo2o/hzHAZgkHXgNO4J7ok57Cvmt0xWySNg0EX8wmweJE3XInszu9IiF289/myeq3/SKtXRsQSryYYJPxjwMzgTQEgaZpU4w+AEElLEBTb867RB++thVoLzhUlrLqZgU0Y9RiN9BxWjEiiuVUDckHHcTBNGZIWkrHHVUa59RZmySNiLqnsE+JThUKiQyoPDRM8e+Y81v5nZZbbgnI49MPjmd1qvDnPQyBSzTgdEdUGKcc1XdkBYuTJ8Lm2iJouVKF3RkvQjT6GB2YRgFq4FKZQS2T7nE3rJfPT7TAG328id4av3dZvhC1TPNWdf4MzKtiaAAVSlLn5z5fNct4869k9k0jxuE4BDtWi3t3yzg/b7t4nqI5f4fpZOFjG2vFJ9JxK/C8ot2rgvHUmw6nlvQ="
+  on:
+    branch: master
+    # only when there is a release it will update pypi
+    tags: true
