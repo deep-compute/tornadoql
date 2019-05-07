@@ -82,7 +82,7 @@ class GQLHandler(web.RequestHandler):
     def handle_graqhql(self):
         result = self.execute_graphql()
         self.log.debug('got_graphql_result', data=result.data,
-            errors=results.errors, invalid=result.invalid)
+            errors=result.errors, invalid=result.invalid)
 
         if result and (result.errors or result.invalid):
             ex = ExecutionError(errors=result.errors)

@@ -19,6 +19,12 @@ class GraphQLHandler(GQLHandler):
     def schema(self):
         return self.application.schema
 
+    @property
+    def context(self):
+        c = super().context
+        c['request'] = self.request
+        return c
+
 
 class GraphQLSubscriptionHandler(GQLSubscriptionHandler):
 
