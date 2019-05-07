@@ -3,24 +3,21 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+import copy
 
 import tornado.web
+from deeputil import Dummy
 
 from tornadoql.graphql_handler import GQLHandler
 from tornadoql.subscription_handler import GQLSubscriptionHandler
 
-PORT = 8888
 STATIC_PATH = os.path.join(os.path.dirname(__file__), 'static')
-SETTINGS = {
-    'sockets': [],
-    'subscriptions': {}
-}
-
+DUMMY_LOG = Dummy()
 
 class GraphQLHandler(GQLHandler):
     @property
     def schema(self):
-        return TornadoQL.schema
+        return self.application.schema
 
 
 class GraphQLSubscriptionHandler(GQLSubscriptionHandler):
@@ -31,7 +28,7 @@ class GraphQLSubscriptionHandler(GQLSubscriptionHandler):
 
     @property
     def schema(self):
-        return TornadoQL.schema
+        return self.application.schema
 
     @property
     def sockets(self):
@@ -51,27 +48,41 @@ class GraphiQLHandler(tornado.web.RequestHandler):
         self.render(os.path.join(STATIC_PATH, 'graphiql.html'))
 
 
-class TornadoQL(object):
-    schema = None
-    endpoints = [
-        (r'/subscriptions', GraphQLSubscriptionHandler, dict(opts=SETTINGS)),
-        (r'/graphql', GraphQLHandler),
-        (r'/graphiql', GraphiQLHandler)
-    ]
+class TornadoQL:
+    PORT = 8888
+    SETTINGS = {
+        'sockets': [],
+        'subscriptions': {}
+    }
 
-    @staticmethod
-    def start(schema, app_endpoints=None, port=PORT, settings=SETTINGS):
-        if app_endpoints is None:
-            app_endpoints = TornadoQL.endpoints
+    def __init__(self, schema, port=PORT, settings=None, log=DUMMY_LOG):
+        self.schema = schema
+        self.settings = settings or copy.deepcopy(self.SETTINGS)
+        self.log = log
+        self.port = port
 
-        TornadoQL.schema = schema
-        app = tornado.web.Application(app_endpoints, **settings)
+    def make_app(self):
+        endpoints = self.define_endpoints()
+        app = tornado.web.Application(endpoints, **self.settings)
+        app.schema = self.schema
+        app.log = self.log
+        return app
 
-        print('Starting GraphQL server on %s' % port)
-        print()
-        print('  GraphiQL:              http://localhost:%s/graphiql' % port)
-        print('  Queries and Mutations: http://localhost:%s/graphql' % port)
-        print('  Subscriptions:         ws://localhost:%s/subscriptions' % port)
-        print()
+    def define_endpoints(self):
+        return [
+            (r'/subscriptions', GraphQLSubscriptionHandler, dict(opts=self.settings)),
+            (r'/graphql', GraphQLHandler),
+            (r'/graphiql', GraphiQLHandler)
+        ]
+
+    def start(self, port=None):
+        port = port or self.port
+
+        self.log.info('starting_server', urls=dict(
+            graphiql='http://localhost:%s/graphiql' % port,
+            queries_and_mutations='http://localhost:%s/graphql' % port,
+            subscriptions='ws://localhost:%s/subscriptions' % port))
+
+        app = self.make_app()
         app.listen(port)
         tornado.ioloop.IOLoop.current().start()

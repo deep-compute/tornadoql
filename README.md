@@ -3,7 +3,7 @@ A [Tornado](http://www.tornadoweb.org/) boilerplate for [Graphene](http://graphe
 Installation
 ------------
 ```sh
-git clone https://github.com/IlyaRadinsky/tornadoql
+git clone https://github.com/deep-compute/tornadoql
 cd tornadoql
 python setup.py install
 ```
@@ -30,17 +30,13 @@ class Query(graphene.ObjectType):
 
 schema = graphene.Schema(query=Query)
 
-TornadoQL.start(schema)
-
+tql = TornadoQL(schema)
+tql.start()
 ```
 
 This will start a server with `/graphql`, `/graphiql`, and `/subscriptions` endpoints, supporting optional arguments for port and application settings. TornadoQL includes an extended version of graphiql GraphQL browser that supports subscriptions as well as queries and mutations.
 
 ```
-Starting GraphQL server on 8888
-
-  GraphiQL:              http://localhost:8888/graphiql
-  Queries and Mutations: http://localhost:8888/graphql
-  Subscriptions:         ws://localhost:8888/subscriptions
-  
+$ python example_app.py run
+2019-05-07T12:21:19.371580Z [info     ] starting_server                host=prashanth-dev id=20190507T122119_9e53062670c211e984939600001c5856 name=example_app.py type=log urls={'graphiql': 'http://localhost:8888/graphiql', 'queries_and_mutations': 'http://localhost:8888/graphql', 'subscriptions': 'ws://localhost:8888/subscriptions'}
 ```

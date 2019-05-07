@@ -2,18 +2,16 @@ from setuptools import setup
 from codecs import open
 from os import path
 
-here = path.abspath(path.dirname(__file__))
-
 setup(
     name='tornadoql',
     version='0.1.5',
     packages=['tornadoql'],
-    url='https://github.com/IlyaRadinsky/tornadoql',
+    url='https://github.com/deep-compute/tornadoql',
     license='MIT',
-    keywords='graphql development web server api',
-    author='Ilya Radinsky - Modifications by Michael Toutonghi',
-    author_email='',
-    description='Package for easily creating GraphQL APIs with Subscription support using TornadoQL',
+    keywords=['graphql'. 'graphene', 'python', 'tornado'],
+    author='deep-compute',
+    author_email='support@deepcompute.com',
+    description='GraphQL API for dev and hosting using Graphene and Tornado',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -21,8 +19,19 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4'
     ],
-    install_requires=['tornado', 'graphene', 'rx'],
+    install_requires=[i
+        'basescript==0.2.8',
+        'graphene==2.1.3',
+        'tornado==6.0.2',
+        'deeputil==0.2.5',
+        'Rx==1.6.1'
+    ],
     package_data={
         'tornadoql': ['static/graphiql.html'],
+    },
+    entry_points={
+        "console_scripts": [
+            "tornadoql = gitkanban:main",
+        ]
     }
 )
