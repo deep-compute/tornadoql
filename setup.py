@@ -19,7 +19,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4'
     ],
-    install_requires=[i
+    install_requires=[
         'basescript==0.2.8',
         'graphene==2.1.3',
         'tornado==6.0.2',
@@ -31,7 +31,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "tornadoql = gitkanban:main",
+            "tornadoql = tornadoql:main",
         ]
     }
 )
