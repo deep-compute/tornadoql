@@ -15,7 +15,6 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: GraphQL Tools',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4'
     ],
