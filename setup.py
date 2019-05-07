@@ -8,7 +8,7 @@ setup(
     packages=['tornadoql'],
     url='https://github.com/deep-compute/tornadoql',
     license='MIT',
-    keywords=['graphql'. 'graphene', 'python', 'tornado'],
+    keywords=['graphql', 'graphene', 'python', 'tornado'],
     author='deep-compute',
     author_email='support@deepcompute.com',
     description='GraphQL API for dev and hosting using Graphene and Tornado',
