@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name='tornadoql',
-    version='0.1.6',
+    version='0.1.7',
     packages=['tornadoql'],
     url='https://github.com/deep-compute/tornadoql',
     license='MIT',
