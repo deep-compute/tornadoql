@@ -55,6 +55,10 @@ class TornadoQL:
         'subscriptions': {}
     }
 
+    GRAPHQL_SUBSCRIPTION_HANDLER = GraphQLSubscriptionHandler
+    GRAPHQL_HANDLER = GraphQLHandler
+    GRAPHIQL_HANDLER = GraphiQLHandler
+
     def __init__(self, schema, port=PORT, settings=None, log=DUMMY_LOG):
         self.schema = schema
         self.settings = settings or copy.deepcopy(self.SETTINGS)
@@ -70,9 +74,9 @@ class TornadoQL:
 
     def define_endpoints(self):
         return [
-            (r'/subscriptions', GraphQLSubscriptionHandler, dict(opts=self.settings)),
-            (r'/graphql', GraphQLHandler),
-            (r'/graphiql', GraphiQLHandler)
+            (r'/subscriptions', self.GRAPHQL_SUBSCRIPTION_HANDLER, dict(opts=self.settings)),
+            (r'/graphql', self.GRAPHQL_HANDLER),
+            (r'/graphiql', self.GRAPHIQL_HANDLER)
         ]
 
     def start(self, port=None):

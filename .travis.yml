@@ -17,8 +17,8 @@ deploy:
   skip_cleanup: true
   api_key:
     secure: "xBho+klxd2/JjpTehXIzqvMcGCT8AwxPPBwJCuFgr7fzD0me7sURG5cdjM1XAzO9uc7E3zpRI/lJaejQxV+oiLkQE0fjWrHUQDERxE7gYKpjrX04j05ny9KrVQXJ2D6fK02Nzh+2HpxCf/0mYICGkziC6RijCF4GFPyME1dxfOKHLdQhZs5iMYvYoZ4/H7S9s5fXhcvOuFgOv30GRhVvPaaFLyuv73wDmxeeK7h43jyNEtsKJMGX05tt3/XDCIAPPqJfL8bPHWEGRrsZn5LxOslG78Cf7VohZK366rr14RNOB0+kCOGj+8QIM1WYmNabLYyTaKGe1wnt0Zf9lEfFN6upheZsQk1916NgwppfxmQZK68sCeM66d5irEogR2xUvkoFuDlXaIMdEixn0mkEex+lsS1OMeppX8WXgqSB5rJuNKIed+6w1AR8WHu52fe7yYCSnNxol50njMr8A/4+C2kUXWpsdxCvOskoMN/FCOvYxfti7QXC6RzPmeRSdaceu3NQGcjM5WEfs2302BRfXflssU9kgzB/fFAE1CVgN8v5B+BzPNNmdpTGKQo/m6TwOg+uAFKb40pjMwe/8andP4BmmgvHUavS81gHu8+8juH0ZN5ILnat3z5vcC/38KOgN5sEkF4tN/hTgLt001BbmlNxMs/GTmYpEQvAGB6uCJs="
-  name: tornadoql-0.1.6
-  tag_name: 0.1.6
+  name: tornadoql-0.1.7
+  tag_name: 0.1.7
   on:
     repo: deep-compute/tornadoql
 - provider: pypi

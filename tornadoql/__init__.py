@@ -1,2 +1,3 @@
-from .tornadoql import GraphQLHandler, GraphQLSubscriptionHandler, TornadoQL
+from .tornadoql import TornadoQL
+from .tornadoql import GraphQLHandler, GraphQLSubscriptionHandler, GraphiQLHandler
 
