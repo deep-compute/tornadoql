@@ -1,12 +1,13 @@
 """
 TornadoQL server as a simple example or skeleton
 """
-from tornadoql.tornadoql import TornadoQL, PORT
+from tornadoql.tornadoql import TornadoQL
 from example_schema import DEFAULT_SCHEMA
+from basescript import BaseScript
 
-def main():
-    print('GraphQL server starting on %s' % PORT)
-    TornadoQL.start(DEFAULT_SCHEMA)
+class ExampleScript(BaseScript):
+    def run(self):
+        TornadoQL(DEFAULT_SCHEMA, log=self.log).start()
 
 if __name__ == '__main__':
-    main()
+    ExampleScript().start()

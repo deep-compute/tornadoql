@@ -6,7 +6,6 @@ from collections import OrderedDict
 from graphql import graphql, format_error
 from tornado import websocket
 from tornado.escape import json_decode, json_encode
-from tornado.log import app_log
 from rx import Observer, Observable
 
 
@@ -46,6 +45,9 @@ class SubscriptionObserver(Observer):
 
 
 class GQLSubscriptionHandler(websocket.WebSocketHandler):
+    def __init__(self, *args, **kwargs):
+        self.log = kwargs.pop('log') if 'log' in kwargs else self.application.log
+        super().__init__(*args, **kwargs)
 
     @property
     def schema(self):
@@ -120,12 +122,12 @@ class GQLSubscriptionHandler(websocket.WebSocketHandler):
         }
 
     def open(self):
-        app_log.info('open socket %s', self)
+        self.log.debug('socket_opened', socket=self)
         self.sockets.append(self)
         self.subscriptions = {}
 
     def on_close(self):
-        app_log.info('close socket %s', self)
+        self.log.debug('socket_closed', socket=self)
         self.sockets.remove(self)
         for i in self.subscriptions:
             self.subscriptions[i].dispose()
@@ -193,10 +195,10 @@ class GQLSubscriptionHandler(websocket.WebSocketHandler):
             self.subscriptions[op_id].dispose()
             del self.subscriptions[op_id]
         self.subscriptions[op_id] = subscription
-        app_log.debug('subscriptions: %s', self.subscriptions)
+        self.log.debug('subscribe_called', op_id=op_id, subscription=subscription,
+                nsubscriptions=len(self.subscriptions))
 
     def unsubscribe(self, op_id):
-        app_log.info('subscrption end: op_id=%s', op_id)
+        self.log.debug('unsubscribe_called', op_id=op_id, nsubscriptions=len(self.subscriptions))
         self.subscriptions = {n: s for n, s in self.subscriptions.items()
                               if s != op_id}
-        app_log.debug('subscriptions: %s', self.subscriptions)
