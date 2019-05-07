@@ -16,7 +16,7 @@ With TornadoQL, exposing a graphene schema as a GraphQL API takes two imports an
 
 ```python
 import graphene
-from tornadoql.tornadoql import TornadoQL
+from tornadoql import TornadoQL
 
 class TestType(graphene.ObjectType):
     id = graphene.ID()
