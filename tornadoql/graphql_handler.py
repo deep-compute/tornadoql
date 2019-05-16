@@ -77,7 +77,11 @@ class GQLHandler(web.RequestHandler):
 
     @error_response
     def post(self):
-        return self.handle_graqhql()
+        try:
+            return self.handle_graqhql()
+        except Exception:
+            self.log.exception('gqlhandler_post')
+            raise
 
     def handle_graqhql(self):
         result = self.execute_graphql()
