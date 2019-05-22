@@ -46,8 +46,8 @@ class SubscriptionObserver(Observer):
 
 class GQLSubscriptionHandler(websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
-        self.log = kwargs.pop('log') if 'log' in kwargs else self.application.log
         super().__init__(*args, **kwargs)
+        self.log = kwargs.pop('log') if 'log' in kwargs else self.application.log
 
     @property
     def schema(self):
