@@ -1,44 +1,45 @@
-language: python
-python:
-- '3.4'
-install:
-- pip install .
-- pip install unittest2
-script:
-- echo "No tests"
 before_deploy:
 - wget https://github.com/jgm/pandoc/releases/download/1.19.1/pandoc-1.19.1-1-amd64.deb
   -O $TRAVIS_BUILD_DIR/pandoc.deb
 - sudo dpkg -i $TRAVIS_BUILD_DIR/pandoc.deb
 - rm $TRAVIS_BUILD_DIR/pandoc.deb
 - pandoc --from=markdown --to=rst --output=$TRAVIS_BUILD_DIR/README.rst README.md
+before_install:
+- pip3 install black
 deploy:
 - provider: releases
   skip_cleanup: true
   api_key:
-    secure: "xBho+klxd2/JjpTehXIzqvMcGCT8AwxPPBwJCuFgr7fzD0me7sURG5cdjM1XAzO9uc7E3zpRI/lJaejQxV+oiLkQE0fjWrHUQDERxE7gYKpjrX04j05ny9KrVQXJ2D6fK02Nzh+2HpxCf/0mYICGkziC6RijCF4GFPyME1dxfOKHLdQhZs5iMYvYoZ4/H7S9s5fXhcvOuFgOv30GRhVvPaaFLyuv73wDmxeeK7h43jyNEtsKJMGX05tt3/XDCIAPPqJfL8bPHWEGRrsZn5LxOslG78Cf7VohZK366rr14RNOB0+kCOGj+8QIM1WYmNabLYyTaKGe1wnt0Zf9lEfFN6upheZsQk1916NgwppfxmQZK68sCeM66d5irEogR2xUvkoFuDlXaIMdEixn0mkEex+lsS1OMeppX8WXgqSB5rJuNKIed+6w1AR8WHu52fe7yYCSnNxol50njMr8A/4+C2kUXWpsdxCvOskoMN/FCOvYxfti7QXC6RzPmeRSdaceu3NQGcjM5WEfs2302BRfXflssU9kgzB/fFAE1CVgN8v5B+BzPNNmdpTGKQo/m6TwOg+uAFKb40pjMwe/8andP4BmmgvHUavS81gHu8+8juH0ZN5ILnat3z5vcC/38KOgN5sEkF4tN/hTgLt001BbmlNxMs/GTmYpEQvAGB6uCJs="
+    secure: xBho+klxd2/JjpTehXIzqvMcGCT8AwxPPBwJCuFgr7fzD0me7sURG5cdjM1XAzO9uc7E3zpRI/lJaejQxV+oiLkQE0fjWrHUQDERxE7gYKpjrX04j05ny9KrVQXJ2D6fK02Nzh+2HpxCf/0mYICGkziC6RijCF4GFPyME1dxfOKHLdQhZs5iMYvYoZ4/H7S9s5fXhcvOuFgOv30GRhVvPaaFLyuv73wDmxeeK7h43jyNEtsKJMGX05tt3/XDCIAPPqJfL8bPHWEGRrsZn5LxOslG78Cf7VohZK366rr14RNOB0+kCOGj+8QIM1WYmNabLYyTaKGe1wnt0Zf9lEfFN6upheZsQk1916NgwppfxmQZK68sCeM66d5irEogR2xUvkoFuDlXaIMdEixn0mkEex+lsS1OMeppX8WXgqSB5rJuNKIed+6w1AR8WHu52fe7yYCSnNxol50njMr8A/4+C2kUXWpsdxCvOskoMN/FCOvYxfti7QXC6RzPmeRSdaceu3NQGcjM5WEfs2302BRfXflssU9kgzB/fFAE1CVgN8v5B+BzPNNmdpTGKQo/m6TwOg+uAFKb40pjMwe/8andP4BmmgvHUavS81gHu8+8juH0ZN5ILnat3z5vcC/38KOgN5sEkF4tN/hTgLt001BbmlNxMs/GTmYpEQvAGB6uCJs=
   name: tornadoql-0.1.8
   tag_name: 0.1.8
-  on:
+  true:
     repo: deep-compute/tornadoql
 - provider: pypi
-  distributions: "sdist bdist_wheel"
+  distributions: sdist bdist_wheel
   server: https://testpypi.python.org/pypi
   skip_cleanup: true
-  user: "deepcompute"
+  user: deepcompute
   password:
-    secure: "R9mFubnB+scg06Oom8q4PH1/npTbwPP03IDB+v59s/gEEVzgxsiFDlu/H4eEBCQUrNxV7DKmxAzk+95gcjXAVwC/HdafZY04gmvS6vbCSAYU6tX3TgprK0lADFF3MKztUHGUFbY2LHJW4luoSbGjnyp3pyoowIZKE5IDTwE3FCusltOI5Igpp/7Bwxurgc7MKTPARVFXrr3H2X+NaxJjti7gJfRIrAprqYRScLkcHj7O8tJy94I7KbKx02FQ0fpXMyKgd1seiw9BJGRVZSyiW7bjazgEprlhpbepvZMLCstY51f5MrGbDYf5W3G4tHge+rhn3LmYSGy1RPFaGi0ic1oZFYGBOReoupAZaTQtOtkWa9Kj3ifTaRm259G5hcrv5T0JB22HZB8xIRhfzRZe8rdl3XVoj7VUayqVGeOKmNrtQOQV4alDhLJCLO1Y35UoYczIxC5hkstUfA3UINa4sAJSGzNoZR8sF/57wv7vNu2MNQau/SuaxNijhaYzjg49t8557pJPJ3gH+g6ac3/xlqdshbWdmyACx2VsAz7I/iWswt4pHPAzc9GGpuZ+4IDQdTzMI4GBtuqoAKwtK3zvOMBFaGRrEDpfqKIQbiJhkDhk7OJLsTTE9nIsyZEVCR5XAr0b91eUWUzCtQBq8a1Lgt+frJjm08W6hZT79PuNvrc="
-  on:
+    secure: R9mFubnB+scg06Oom8q4PH1/npTbwPP03IDB+v59s/gEEVzgxsiFDlu/H4eEBCQUrNxV7DKmxAzk+95gcjXAVwC/HdafZY04gmvS6vbCSAYU6tX3TgprK0lADFF3MKztUHGUFbY2LHJW4luoSbGjnyp3pyoowIZKE5IDTwE3FCusltOI5Igpp/7Bwxurgc7MKTPARVFXrr3H2X+NaxJjti7gJfRIrAprqYRScLkcHj7O8tJy94I7KbKx02FQ0fpXMyKgd1seiw9BJGRVZSyiW7bjazgEprlhpbepvZMLCstY51f5MrGbDYf5W3G4tHge+rhn3LmYSGy1RPFaGi0ic1oZFYGBOReoupAZaTQtOtkWa9Kj3ifTaRm259G5hcrv5T0JB22HZB8xIRhfzRZe8rdl3XVoj7VUayqVGeOKmNrtQOQV4alDhLJCLO1Y35UoYczIxC5hkstUfA3UINa4sAJSGzNoZR8sF/57wv7vNu2MNQau/SuaxNijhaYzjg49t8557pJPJ3gH+g6ac3/xlqdshbWdmyACx2VsAz7I/iWswt4pHPAzc9GGpuZ+4IDQdTzMI4GBtuqoAKwtK3zvOMBFaGRrEDpfqKIQbiJhkDhk7OJLsTTE9nIsyZEVCR5XAr0b91eUWUzCtQBq8a1Lgt+frJjm08W6hZT79PuNvrc=
+  true:
     branch: master
     tags: false
-  # pypi
 - provider: pypi
-  distributions: "sdist bdist_wheel"
+  distributions: sdist bdist_wheel
   skip_cleanup: true
-  user: "deepcompute"
-  password: 
-    secure: "R9mFubnB+scg06Oom8q4PH1/npTbwPP03IDB+v59s/gEEVzgxsiFDlu/H4eEBCQUrNxV7DKmxAzk+95gcjXAVwC/HdafZY04gmvS6vbCSAYU6tX3TgprK0lADFF3MKztUHGUFbY2LHJW4luoSbGjnyp3pyoowIZKE5IDTwE3FCusltOI5Igpp/7Bwxurgc7MKTPARVFXrr3H2X+NaxJjti7gJfRIrAprqYRScLkcHj7O8tJy94I7KbKx02FQ0fpXMyKgd1seiw9BJGRVZSyiW7bjazgEprlhpbepvZMLCstY51f5MrGbDYf5W3G4tHge+rhn3LmYSGy1RPFaGi0ic1oZFYGBOReoupAZaTQtOtkWa9Kj3ifTaRm259G5hcrv5T0JB22HZB8xIRhfzRZe8rdl3XVoj7VUayqVGeOKmNrtQOQV4alDhLJCLO1Y35UoYczIxC5hkstUfA3UINa4sAJSGzNoZR8sF/57wv7vNu2MNQau/SuaxNijhaYzjg49t8557pJPJ3gH+g6ac3/xlqdshbWdmyACx2VsAz7I/iWswt4pHPAzc9GGpuZ+4IDQdTzMI4GBtuqoAKwtK3zvOMBFaGRrEDpfqKIQbiJhkDhk7OJLsTTE9nIsyZEVCR5XAr0b91eUWUzCtQBq8a1Lgt+frJjm08W6hZT79PuNvrc="
-  on:
+  user: deepcompute
+  password:
+    secure: R9mFubnB+scg06Oom8q4PH1/npTbwPP03IDB+v59s/gEEVzgxsiFDlu/H4eEBCQUrNxV7DKmxAzk+95gcjXAVwC/HdafZY04gmvS6vbCSAYU6tX3TgprK0lADFF3MKztUHGUFbY2LHJW4luoSbGjnyp3pyoowIZKE5IDTwE3FCusltOI5Igpp/7Bwxurgc7MKTPARVFXrr3H2X+NaxJjti7gJfRIrAprqYRScLkcHj7O8tJy94I7KbKx02FQ0fpXMyKgd1seiw9BJGRVZSyiW7bjazgEprlhpbepvZMLCstY51f5MrGbDYf5W3G4tHge+rhn3LmYSGy1RPFaGi0ic1oZFYGBOReoupAZaTQtOtkWa9Kj3ifTaRm259G5hcrv5T0JB22HZB8xIRhfzRZe8rdl3XVoj7VUayqVGeOKmNrtQOQV4alDhLJCLO1Y35UoYczIxC5hkstUfA3UINa4sAJSGzNoZR8sF/57wv7vNu2MNQau/SuaxNijhaYzjg49t8557pJPJ3gH+g6ac3/xlqdshbWdmyACx2VsAz7I/iWswt4pHPAzc9GGpuZ+4IDQdTzMI4GBtuqoAKwtK3zvOMBFaGRrEDpfqKIQbiJhkDhk7OJLsTTE9nIsyZEVCR5XAr0b91eUWUzCtQBq8a1Lgt+frJjm08W6hZT79PuNvrc=
+  true:
     branch: master
-    # only when there is a release it will update pypi
     tags: true
+install:
+- pip install .
+- pip install unittest2
+language: python
+python:
+- '3.4'
+script:
+- black --check .
+- echo "No tests"
