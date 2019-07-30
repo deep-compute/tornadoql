@@ -25,35 +25,32 @@ class PostMutation(graphene.Mutation):
 
     def mutate(self, info, userId, msg):
         import uuid
-        newMessage = Message(
-            id=str(uuid.uuid4()),
-            userId=userId,
-            msg=msg
-        )
+
+        newMessage = Message(id=str(uuid.uuid4()), userId=userId, msg=msg)
         Storage.stream.on_next(newMessage)
         return newMessage
 
 
 class Query(graphene.ObjectType):
     class Meta:
-        description = 'Example query for TornadoQL'
+        description = "Example query for TornadoQL"
 
     hello = graphene.String()
 
     def resolve_hello(self, info):
-        return 'Hello from TornadoQL!'
+        return "Hello from TornadoQL!"
 
 
 class Mutation(graphene.ObjectType):
     class Meta:
-        description = 'Example mutation for TornadoQL'
+        description = "Example mutation for TornadoQL"
 
     post = PostMutation.Field()
 
 
 class Subscription(graphene.ObjectType):
     class Meta:
-        description = 'Example subscription for TornadoQL'
+        description = "Example subscription for TornadoQL"
 
     onPost = graphene.Field(Message)
 
@@ -61,4 +58,6 @@ class Subscription(graphene.ObjectType):
         return Storage.stream
 
 
-DEFAULT_SCHEMA = graphene.Schema(query=Query, mutation=Mutation, subscription=Subscription)
+DEFAULT_SCHEMA = graphene.Schema(
+    query=Query, mutation=Mutation, subscription=Subscription
+)
