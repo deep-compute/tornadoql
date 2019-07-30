@@ -23,32 +23,31 @@ def error_status(exception):
 
 def error_format(exception):
     if isinstance(exception, ExecutionError):
-        return [{'message': e} for e in exception.errors]
+        return [{"message": e} for e in exception.errors]
     elif isinstance(exception, GraphQLError):
         return [format_graphql_error(exception)]
     elif isinstance(exception, web.HTTPError):
-        return [{'message': exception.log_message,
-                 'reason': exception.reason}]
+        return [{"message": exception.log_message, "reason": exception.reason}]
     else:
-        return [{'message': 'Unknown server error'}]
+        return [{"message": "Unknown server error"}]
 
 
 def error_response(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        log = getattr(self, 'log')
+        log = getattr(self, "log")
 
         try:
             result = func(self, *args, **kwargs)
         except Exception as ex:
             if not isinstance(ex, (web.HTTPError, ExecutionError, GraphQLError)):
-                tb = ''.join(traceback.format_exception(*sys.exc_info()))
+                tb = "".join(traceback.format_exception(*sys.exc_info()))
                 if log:
-                    log.exception('error_response')
+                    log.exception("error_response")
             self.set_status(error_status(ex))
-            error_json = json_encode({'errors': error_format(ex)})
+            error_json = json_encode({"errors": error_format(ex)})
             if log:
-                log.debug('error_response_json', data=error_json)
+                log.debug("error_response_json", data=error_json)
             self.write(error_json)
         else:
             return result
@@ -63,7 +62,7 @@ class ExecutionError(Exception):
             self.errors = []
         else:
             self.errors = [str(e) for e in errors]
-        self.message = '\n'.join(self.errors)
+        self.message = "\n".join(self.errors)
 
 
 class GQLHandler(web.RequestHandler):
@@ -80,31 +79,35 @@ class GQLHandler(web.RequestHandler):
         try:
             return self.handle_graqhql()
         except Exception:
-            self.log.exception('gqlhandler_post')
+            self.log.exception("gqlhandler_post")
             raise
 
     def handle_graqhql(self):
         result = self.execute_graphql()
-        self.log.debug('got_graphql_result', data=result.data,
-            errors=result.errors, invalid=result.invalid)
+        self.log.debug(
+            "got_graphql_result",
+            data=result.data,
+            errors=result.errors,
+            invalid=result.invalid,
+        )
 
         if result and (result.errors or result.invalid):
             ex = ExecutionError(errors=result.errors)
-            self.log.warn('got_graphql_error', error=ex)
+            self.log.warn("got_graphql_error", error=ex)
             raise ex
 
-        response = {'data': result.data}
+        response = {"data": result.data}
         self.write(json_encode(response))
 
     def execute_graphql(self):
         graphql_req = self.graphql_request
-        self.log.debug('got_graphql_request', req=graphql_req)
+        self.log.debug("got_graphql_request", req=graphql_req)
         return self.schema.execute(
-            graphql_req.get('query'),
-            variable_values=graphql_req.get('variables'),
-            operation_name=graphql_req.get('operationName'),
+            graphql_req.get("query"),
+            variable_values=graphql_req.get("variables"),
+            operation_name=graphql_req.get("operationName"),
             context_value=self.context,
-            middleware=self.middleware
+            middleware=self.middleware,
         )
 
     @property
@@ -113,11 +116,11 @@ class GQLHandler(web.RequestHandler):
 
     @property
     def content_type(self):
-        return self.request.headers.get('Content-Type', 'text/plain').split(';')[0]
+        return self.request.headers.get("Content-Type", "text/plain").split(";")[0]
 
     @property
     def schema(self):
-        raise NotImplementedError('schema must be provided')
+        raise NotImplementedError("schema must be provided")
 
     @property
     def middleware(self):
